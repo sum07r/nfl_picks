@@ -6,17 +6,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        writePicksData(new Picks("alex", "401772345", "NE", 3), "data/picks.csv");
-        writePicksData(new Picks("sam", "401772345", "NYJ", 1), "data/picks.csv");
-
-        Picks[] loaded = readPicksData("data/picks.csv");
-        System.out.println("Picks loaded: " + loaded.length);
-        for (Picks p : loaded) {
-            System.out.println(p.toCsv());
-        }
+        Game[] games = readGameData("data/week.csv");
+        Scanner scanner = new Scanner(System.in);
+        Menu menu = new Menu(scanner, games);
+        menu.run();
     }
 
     
