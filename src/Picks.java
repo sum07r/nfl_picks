@@ -28,6 +28,10 @@ public class Picks {
         return confidence;
     }
 
-    
+    public String toCsv() {
+        return name + "," + gameId + "," + pick + "," + confidence;
+    }
+
+
 
 }

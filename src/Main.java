@@ -1,24 +1,21 @@
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        String gameDataFilePath = "data/week.csv"; 
-        Game[] games = readGameData(gameDataFilePath);
-        
-        // Print the game data to verify
-        for (Game game : games) {
-            System.out.println("Game ID: " + game.getGameId());
-            System.out.println("Home Team: " + game.getHomeTeam());
-            System.out.println("Away Team: " + game.getAwayTeam());
-            System.out.println("Game Date: " + game.getGameDate());
-            System.out.println("Game Week: " + game.getGameWeek());
-            System.out.println("Home Score: " + game.getHomeScore());
-            System.out.println("Away Score: " + game.getAwayScore());
-            System.out.println("Winner: " + game.getWinner());
-            System.out.println();
+        writePicksData(new Picks("alex", "401772345", "NE", 3), "data/picks.csv");
+        writePicksData(new Picks("sam", "401772345", "NYJ", 1), "data/picks.csv");
+
+        Picks[] loaded = readPicksData("data/picks.csv");
+        System.out.println("Picks loaded: " + loaded.length);
+        for (Picks p : loaded) {
+            System.out.println(p.toCsv());
         }
     }
 
@@ -57,6 +54,41 @@ public class Main {
     }
         
 
+    public static void writePicksData(Picks pick, String filePath) throws IOException {
+        File file = new File(filePath);
+        boolean isNew = !file.exists();
+        try (PrintWriter out = new PrintWriter(new FileWriter(file, true))) {
+            if (isNew) {
+                out.println("Name,Game ID,Pick,Confidence");
+            }
+            out.println(pick.toCsv());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    public static Picks[] readPicksData(String filePath) throws IOException {
+        ArrayList<Picks> picks = new ArrayList<>();
+        ArrayList<String> lines;
+        try {
+            lines = readAllLines(filePath);
+        } catch (FileNotFoundException e) {
+            return new Picks[0];
+        }
+        for (int i = 1; i < lines.size(); i++) {
+            if (lines.get(i).trim().isEmpty()) {
+                continue; 
+            }
+            String[] pickData = lines.get(i).split(",");
+            Picks pick = new Picks(pickData[0], pickData[1], pickData[2], Double.parseDouble(pickData[3]));
+            picks.add(pick);
+        }
+        
+        return picks.toArray(new Picks[0]);
+    }
 
         
 }
