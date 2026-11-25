@@ -38,7 +38,13 @@ public class Main {
     public static Game[] readGameData(String filePath) throws IOException {
         // Implement the logic to read game data from the specified file
         ArrayList<Game> games = new ArrayList<>();
-        ArrayList<String> lines = readAllLines(filePath);
+        ArrayList<String> lines;
+        try {
+            lines = readAllLines(filePath);
+        } catch (FileNotFoundException e) {
+            System.out.println("Game data file not found: " + filePath);
+            return new Game[0];
+        }
         for (int i = 1; i < lines.size(); i++) {
             if (lines.get(i).trim().isEmpty()) {
                 continue; 
