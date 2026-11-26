@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.IOException;
 
@@ -72,12 +73,14 @@ public class Menu {
         }
     }
 
+
     public void run() {
         while (true) {
             System.out.println("Menu:");
             System.out.println("1. View Games");
             System.out.println("2. Make a Pick");
-            System.out.println("3. Exit");
+            System.out.println("3. View Leaderboard");
+            System.out.println("4. Exit");
             System.out.print("Enter your choice: ");
             String input = scanner.nextLine();
             try {
@@ -85,7 +88,7 @@ public class Menu {
             } catch (NumberFormatException e) {
                 System.out.println("Invalid choice. Please enter a number.");
                 continue;
-            } // Consume the newline character
+            }
 
             switch (choice) {
                 case 1:
@@ -95,6 +98,13 @@ public class Menu {
                     makePick();
                     break;
                 case 3:
+                    try {
+                        Leaderboard.printStandings(Leaderboard.buildStandings(Main.readPicksData("data/picks.csv"), games));
+                    } catch (IOException e) {
+                        System.out.println("Error reading picks data: " + e.getMessage());
+                    }
+                    break;
+                case 4:
                     System.out.println("Exiting...");
                     return;
                 default:
