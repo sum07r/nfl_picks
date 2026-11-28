@@ -8,7 +8,7 @@ I argue with friends about who's best at picking NFL games, but no one actually 
 
 ## How It Works
 
-Game results come from ESPN's public scoreboard and are saved to `data/week.csv`, one finished game per line. The Java program loads those games, lets a player enter picks through a text menu, and saves each pick to `data/picks.csv`. The leaderboard compares every saved pick with the real winner of its game, then shows each player's record and accuracy.
+Game results come from ESPN's public scoreboard and are saved to `data/week.csv`, one finished game per line. The Java program loads those games, lets a player enter picks through a text menu, and saves each pick to `data/picks.csv`. The leaderboard compares each saved pick with its game's real winner, then shows each player's record and accuracy.
 
 ![System diagram](docs/diagram.png)
 <!-- TODO: export the diagram so it matches the final code: ESPN -> week.csv -> Game objects -> Menu -> picks.csv -> Leaderboard -->
@@ -16,13 +16,13 @@ Game results come from ESPN's public scoreboard and are saved to `data/week.csv`
 ## Tech Stack
 
 * Language: Java and Bash
-* Libraries: none, just standard Java
+* Libraries: None
 * External tools: curl, jq, ESPN scoreboard API (unofficial, no key needed)
 * Data storage: CSV files (`data/week.csv` for games, `data/picks.csv` for picks)
 
 ## Setup
 
-Requires Java (tested with Java <!-- TODO: your version from `java -version` -->). `curl` and `jq` are only needed to fetch a new week of games; the repo already includes a completed week in `data/week.csv`.
+Requires Java 25 (tested with OpenJDK Temurin 25.0.4.1). `curl` and `jq` are only needed to fetch a new week of games; the repo already includes a completed week in `data/week.csv`.
 
 ```bash
 git clone https://github.com/sum07r/nfl_picks.git
@@ -71,16 +71,6 @@ game_id,date,week,away,away_score,home,home_score,winner
 Name,Game ID,Pick,Confidence
 ```
 
-### Getting a different week (optional)
-
-The fetch step is done by hand. For each game day, request the scoreboard and keep finished games:
-
-```bash
-curl -sS --compressed "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=YYYYMMDD" -o day.json
-```
-
-Then turn `day.json` into CSV rows with `jq` (selecting games where `.status.type.completed` is true, and pulling the id, date, week, teams, scores, and winner), and append them under the header line in `data/week.csv`. ESPN's dates are in US Eastern time.
-
 ## Project Layout
 
 * `src/Main.java`: starts the program, and has the CSV loading and saving methods
@@ -95,7 +85,7 @@ Then turn `day.json` into CSV rows with `jq` (selecting games where `.status.typ
 ## Known Limitations
 
 * The demo uses a completed week, so every game already has a result.
-* Fetching a new week is manual (no script yet).
+* Fetching a new week is manual.
 * Player names are case-sensitive.
 * The same player can pick the same game more than once, and both picks count.
 
