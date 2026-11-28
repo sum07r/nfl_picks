@@ -11,7 +11,6 @@ I argue with friends about who's best at picking NFL games, but no one actually 
 Game results come from ESPN's public scoreboard and are saved to `data/week.csv`, one finished game per line. The Java program loads those games, lets a player enter picks through a text menu, and saves each pick to `data/picks.csv`. The leaderboard compares each saved pick with its game's real winner, then shows each player's record and accuracy.
 
 ![System diagram](docs/diagram.png)
-<!-- TODO: export the diagram so it matches the final code: ESPN -> week.csv -> Game objects -> Menu -> picks.csv -> Leaderboard -->
 
 ## Tech Stack
 
